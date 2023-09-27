@@ -44,7 +44,6 @@ void setup() {
   Serial.begin(115200);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
     delay(300);
   }
   Serial.println();
@@ -111,7 +110,14 @@ void loop() {
 
   // Appel de l'API HTTP
   HTTPClient http;
-  http.begin("https://versionfinalwebservicesolar-production-aec0.up.railway.app/api/solar/insertdonnee/1234/4567/8910/1112"); // Remplacez par votre URL
+
+  // char url[256]; // Définissez une chaîne de caractères suffisamment grande pour contenir l'URL
+  // sprintf(url, "https://versionfinalwebservicesolar-production-aec0.up.railway.app/api/solar/insertdonnee/%f/%f/%f/%f", Voltage, current, energy, tempC);
+
+  // http.begin(url);
+
+  http.begin("https://versionfinalwebservicesolar-production-aec0.up.railway.app/api/solar/insertdonnee/0101/0202/0303/0404"); // Utilisez l'URL générée
+  
   int httpResponseCode = http.GET();
   if (httpResponseCode == 200) {
     String response = http.getString();
@@ -126,13 +132,13 @@ void loop() {
    srand(time(NULL));
 
     int lower_bound = 1;  // The lower bound of the range
-    int upper_bound = 3; // The upper bound of the range
+    int upper_bound = 2; // The upper bound of the range
 
     // Generate a random number between lower_bound and upper_bound
     int zavatra = (rand() % (upper_bound - lower_bound + 1)) + lower_bound;
 
-  if(zavatra==3){
-    if(Firebase.RTDB.setFloat(&firebaseData, "Notification/Energie", zavatra)){
+  if(zavatra==2){
+    if(Firebase.RTDB.setFloat(&firebaseData, "Notification/ito", zavatra)){
         Serial.println("tafiditra anaty firebase");
       }
       else{
@@ -140,5 +146,6 @@ void loop() {
       Serial.print(firebaseData.errorReason());
       }
   }
+
     delay(5000);
 }
